@@ -149,6 +149,7 @@ class _InputContactFormState extends State<InputContactForm> {
                   minHeight: 0.0,
                   maxHeight: MediaQuery.of(context).size.height - 350),
               child: ListView.builder(
+                controller: ScrollController(initialScrollOffset: 0),
                 shrinkWrap: true,
                 itemBuilder: (context, i) {
                   return ListTile(

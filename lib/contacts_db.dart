@@ -85,17 +85,34 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                           ),
                           OutlinedButton(
                             onPressed: () {
-                              deleteContact(contact.data!.id.toString());
-                              fetchNumOfContacts().then((value) {
-                                setState(() {
-                                  futureContacts.removeAt(index);
-                                });
-                                futureNumOfContacts--;
-                                setState(() {
-                                  SecondScreen.of(context)!
-                                      .editVisibilityOfWidget = false;
-                                });
-                              });
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Delete'),
+                                      content: const Text(
+                                          'Are you sure you want to delete this contact?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('Cancel')),
+                                        TextButton(
+                                            onPressed: () {
+                                              deleteContact(contact.data!.id.toString());
+                                              futureNumOfContacts--;
+                                              fetchNumOfContacts().then((value) {
+                                                setState(() {
+                                                  futureContacts.removeAt(index);
+                                                });
+                                              });
+                                              SecondScreen.of(super.context)!.editVisibilityOfWidget = false;
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Confirm'))
+                                      ],
+                                    );
+                                  });
                             },
                             child: const Icon(
                               Icons.delete,
@@ -147,8 +164,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                             onPressed: () {
                               //Update
                               setState(() {
-                                SecondScreen.of(context)!
-                                    .editVisibilityOfWidget = false;
+                                SecondScreen.of(context)!.editVisibilityOfWidget = false;
                               });
                             },
                           ),
@@ -178,17 +194,34 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                           ),
                           OutlinedButton(
                             onPressed: () {
-                              deleteContact(contact.data!.id.toString());
-                              fetchNumOfContacts().then((value) {
-                                setState(() {
-                                  futureContacts.removeAt(index);
-                                });
-                                futureNumOfContacts--;
-                                setState(() {
-                                  SecondScreen.of(context)!
-                                      .editVisibilityOfWidget = false;
-                                });
-                              });
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Delete'),
+                                      content: const Text(
+                                          'Are you sure you want to delete this contact?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('Cancel')),
+                                        TextButton(
+                                            onPressed: () {
+                                              deleteContact(contact.data!.id.toString());
+                                              futureNumOfContacts--;
+                                              fetchNumOfContacts().then((value) {
+                                                setState(() {
+                                                  futureContacts.removeAt(index);
+                                                });
+                                              });
+                                              SecondScreen.of(super.context)!.editVisibilityOfWidget = false;
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Text('Yes'))
+                                      ],
+                                    );
+                                  });
                             },
                             child: const Icon(
                               Icons.delete,
@@ -237,6 +270,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                     Expanded(
                       flex: 3,
                       child: ListView.builder(
+                          controller: ScrollController(initialScrollOffset: 0),
                           itemCount: contact.data!.phoneNumbers.length + pnAdd,
                           itemBuilder: (context, index) {
                             return TextFormField(
@@ -247,66 +281,71 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                           }),
                     ),
                     Flexible(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {
-                              pnAdd++;
-                              SecondScreen.of(context)!.editToBeEdit =
-                                  buildEditWidget(index, true);
-                            },
-                            child: const Icon(Icons.add),
-                            style: OutlinedButton.styleFrom(
-                                shape: const CircleBorder()),
-                          ),
-                          OutlinedButton(
-                            onPressed: () {
-                              if (contact.data!.phoneNumbers.length + pnAdd >
-                                  0) {
-                                pnAdd--;
-                              }
-                              SecondScreen.of(context)!.editToBeEdit =
-                                  buildEditWidget(index, true);
-                            },
-                            child: const Icon(Icons.remove),
-                            style: OutlinedButton.styleFrom(
-                                shape: const CircleBorder()),
-                          ),
-                          Expanded(
-                            child: ElevatedButton(
-                              child: const Text('Confirm'),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            OutlinedButton(
                               onPressed: () {
-                                //Update
-                                List<String> pNumbers = [];
-                                for (int i = 0; i < pNumbersCtrl.length; i++) {
-                                  pNumbers.add(pNumbersCtrl[i].text);
-                                }
-                                updateContact(
-                                    lNameEditCtrl.text,
-                                    fNameEditCtrl.text,
-                                    pNumbers,
-                                    contact.data!.id);
-                                setState(() {
-                                  SecondScreen.of(context)!
-                                      .editVisibilityOfWidget = false;
-                                });
-                                futureContacts.clear();
-                                fetchNumOfContacts().then((value) {
-                                  setState(() {
-                                    futureNumOfContacts = int.parse(value);
-                                    for (int i = 0;
-                                        i < futureNumOfContacts;
-                                        i++) {
-                                      futureContacts.insert(
-                                          i, fetchContacts(i));
-                                    }
-                                  });
-                                });
+                                pnAdd++;
+                                SecondScreen.of(context)!.editToBeEdit =
+                                    buildEditWidget(index, true);
                               },
+                              child: const Icon(Icons.add),
+                              style: OutlinedButton.styleFrom(
+                                  shape: const CircleBorder()),
                             ),
-                          ),
-                        ],
+                            OutlinedButton(
+                              onPressed: () {
+                                if (contact.data!.phoneNumbers.length + pnAdd >
+                                    0) {
+                                  pnAdd--;
+                                }
+                                SecondScreen.of(context)!.editToBeEdit =
+                                    buildEditWidget(index, true);
+                              },
+                              child: const Icon(Icons.remove),
+                              style: OutlinedButton.styleFrom(
+                                  shape: const CircleBorder()),
+                            ),
+                            Expanded(
+                              child: ElevatedButton(
+                                child: const Text('Confirm'),
+                                onPressed: () {
+                                  //Update
+                                  List<String> pNumbers = [];
+                                  for (int i = 0;
+                                      i < pNumbersCtrl.length;
+                                      i++) {
+                                    pNumbers.add(pNumbersCtrl[i].text);
+                                  }
+                                  updateContact(
+                                      lNameEditCtrl.text,
+                                      fNameEditCtrl.text,
+                                      pNumbers,
+                                      contact.data!.id);
+                                  setState(() {
+                                    SecondScreen.of(context)!
+                                        .editVisibilityOfWidget = false;
+                                  });
+                                  futureContacts.clear();
+                                  fetchNumOfContacts().then((value) {
+                                    setState(() {
+                                      futureNumOfContacts = int.parse(value);
+                                      for (int i = 0;
+                                          i < futureNumOfContacts;
+                                          i++) {
+                                        futureContacts.insert(
+                                            i, fetchContacts(i));
+                                      }
+                                    });
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -324,6 +363,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+        controller: ScrollController(initialScrollOffset: 0),
         itemCount: futureContacts.length,
         itemBuilder: (context, index) {
           return Row(

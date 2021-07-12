@@ -68,10 +68,9 @@ class _EditContactWidgetState extends State<EditContactWidget> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
-                  child: LimitedBox(
-                    maxHeight: MediaQuery.of(context).size.height-250,
-                    child: ListView(
-                      padding: const EdgeInsets.all(20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Column(
                       children: <Widget>[
                         const Padding(
                           padding: EdgeInsets.all(8.0),

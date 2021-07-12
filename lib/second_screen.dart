@@ -8,7 +8,7 @@ import 'edit_widget.dart';
 class SecondScreen extends StatefulWidget {
   final List<ContactLocal> todo;
 
-  SecondScreen({Key? key, required this.todo,}) : super(key: key);
+  const SecondScreen({Key? key, required this.todo,}) : super(key: key);
 
   @override
   State<SecondScreen> createState() => _SecondScreenState();
@@ -28,12 +28,6 @@ class _SecondScreenState extends State<SecondScreen> {
   set editToBeEdit(FutureBuilder<Contacts> val) => setState(() {
     _toBeEdit = val;
   });
-
-  void reset() {
-    setState(() {
-
-    });
-  }
 
   final editLastName = TextEditingController();
   final editFirstName = TextEditingController();
@@ -60,6 +54,7 @@ class _SecondScreenState extends State<SecondScreen> {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxHeight: 75),
                 child: ListView.builder(
+                  controller: ScrollController(initialScrollOffset: 0),
                   shrinkWrap: true,
                   itemCount: widget.todo.length,
                   itemBuilder: (context, index) {
