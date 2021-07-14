@@ -7,9 +7,9 @@ import 'package:http/http.dart' as http;
 
 import 'second_screen.dart';
 
-const String host = 'http://192.168.254.105:5000';
+//const String host = 'http://192.168.254.105:5000';
 //const String host = 'https://test-heroku-3154.herokuapp.com';
-//const String host = 'https://phonebook-app-09120912.herokuapp.com';
+const String host = 'https://phonebook-app-09120912.herokuapp.com';
 
 void main() => runApp(const PbApp());
 
