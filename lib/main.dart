@@ -7,9 +7,9 @@ import 'package:http/http.dart' as http;
 
 import 'second_screen.dart';
 
-//const String host = 'http://192.168.254.100:5000';
+const String host = 'http://192.168.254.105:5000';
 //const String host = 'https://test-heroku-3154.herokuapp.com';
-const String host = 'https://phonebook-app-09120912.herokuapp.com';
+//const String host = 'https://phonebook-app-09120912.herokuapp.com';
 
 void main() => runApp(const PbApp());
 
@@ -237,6 +237,17 @@ Future<Contacts> fetchContacts(int index) async {
     return Contacts.fromJson(jsonDecode(res.body)[index]);
   } else {
     throw Exception('Failed to load contacts');
+  }
+}
+
+
+Future<Contacts> getContactById(String id) async {
+  final res = await http.get(Uri.parse('$host/$id'));
+
+  if (res.statusCode == 200) {
+    return Contacts.fromJson(jsonDecode(res.body));
+  } else {
+    throw Exception('Failed to get contact');
   }
 }
 

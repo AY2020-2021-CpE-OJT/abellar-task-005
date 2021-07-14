@@ -40,7 +40,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
   final lNameEditCtrl = TextEditingController();
   final fNameEditCtrl = TextEditingController();
 
-  FutureBuilder<Contacts> buildEditWidget(int index, bool edit) {
+  FutureBuilder<Contacts> buildEditWidget(int index, bool edit, String id) {
     List<TextEditingController> pNumbersCtrl = [];
     return FutureBuilder(
       builder: (context, contact) {
@@ -60,11 +60,14 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                       constraints: const BoxConstraints(minHeight: 20),
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 5.0),
-                          child: Text(
-                            '${contact.data!.firstName.toString()} ${contact.data!.lastName.toString()}',
-                            style: const TextStyle(fontSize: 20),
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 20),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 5.0),
+                            child: Text(
+                              '${contact.data!.firstName.toString()} ${contact.data!.lastName.toString()}',
+                              style: const TextStyle(fontSize: 20),
+                            ),
                           ),
                         ),
                       ),
@@ -124,7 +127,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                           OutlinedButton(
                             onPressed: () {
                               SecondScreen.of(context)!.editToBeEdit =
-                                  buildEditWidget(index, true);
+                                  buildEditWidget(index, true, id);
                             },
                             child: const Icon(
                               Icons.edit,
@@ -290,7 +293,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                               onPressed: () {
                                 pnAdd++;
                                 SecondScreen.of(context)!.editToBeEdit =
-                                    buildEditWidget(index, true);
+                                    buildEditWidget(index, true, id);
                               },
                               child: const Icon(Icons.add),
                               style: OutlinedButton.styleFrom(
@@ -303,7 +306,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                   pnAdd--;
                                 }
                                 SecondScreen.of(context)!.editToBeEdit =
-                                    buildEditWidget(index, true);
+                                    buildEditWidget(index, true, id);
                               },
                               child: const Icon(Icons.remove),
                               style: OutlinedButton.styleFrom(
@@ -356,12 +359,14 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
         }
         return const Text('');
       },
-      future: futureContacts[index],
+      future: getContactById(id),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    late String id;
+
     return ListView.builder(
         controller: ScrollController(initialScrollOffset: 0),
         itemCount: futureContacts.length,
@@ -373,6 +378,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                   title: FutureBuilder<Contacts>(
                     builder: (context, contact) {
                       if (contact.hasData) {
+                        id = contact.data!.id.toString();
                         return Text(
                             '${contact.data!.firstName.toString()} ${contact.data!.lastName.toString()}');
                       } else if (contact.hasError) {
@@ -399,7 +405,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                   onLongPress: () {
                     SecondScreen.of(context)!.editVisibilityOfWidget = true;
                     SecondScreen.of(context)!.editToBeEdit =
-                        buildEditWidget(index, false);
+                        buildEditWidget(index, false, id);
                   },
                 ),
               ),
