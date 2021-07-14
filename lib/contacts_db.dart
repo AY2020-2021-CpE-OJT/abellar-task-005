@@ -357,7 +357,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
             ]),
           );
         }
-        return const Text('');
+        return SizedBox(height: MediaQuery.of(context).size.height-500, width: MediaQuery.of(context).size.width,child: Center(child: const CircularProgressIndicator()));
       },
       future: getContactById(id),
     );
