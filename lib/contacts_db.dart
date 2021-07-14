@@ -102,14 +102,19 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                             child: const Text('Cancel')),
                                         TextButton(
                                             onPressed: () {
-                                              deleteContact(contact.data!.id.toString());
+                                              deleteContact(
+                                                  contact.data!.id.toString());
                                               futureNumOfContacts--;
-                                              fetchNumOfContacts().then((value) {
+                                              fetchNumOfContacts()
+                                                  .then((value) {
                                                 setState(() {
-                                                  futureContacts.removeAt(index);
+                                                  futureContacts
+                                                      .removeAt(index);
                                                 });
                                               });
-                                              SecondScreen.of(super.context)!.editVisibilityOfWidget = false;
+                                              SecondScreen.of(super.context)!
+                                                      .editVisibilityOfWidget =
+                                                  false;
                                               Navigator.pop(context);
                                             },
                                             child: const Text('Confirm'))
@@ -167,7 +172,8 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                             onPressed: () {
                               //Update
                               setState(() {
-                                SecondScreen.of(context)!.editVisibilityOfWidget = false;
+                                SecondScreen.of(context)!
+                                    .editVisibilityOfWidget = false;
                               });
                             },
                           ),
@@ -211,14 +217,19 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                             child: const Text('Cancel')),
                                         TextButton(
                                             onPressed: () {
-                                              deleteContact(contact.data!.id.toString());
+                                              deleteContact(
+                                                  contact.data!.id.toString());
                                               futureNumOfContacts--;
-                                              fetchNumOfContacts().then((value) {
+                                              fetchNumOfContacts()
+                                                  .then((value) {
                                                 setState(() {
-                                                  futureContacts.removeAt(index);
+                                                  futureContacts
+                                                      .removeAt(index);
                                                 });
                                               });
-                                              SecondScreen.of(super.context)!.editVisibilityOfWidget = false;
+                                              SecondScreen.of(super.context)!
+                                                      .editVisibilityOfWidget =
+                                                  false;
                                               Navigator.pop(context);
                                             },
                                             child: const Text('Yes'))
@@ -357,7 +368,10 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
             ]),
           );
         }
-        return SizedBox(height: MediaQuery.of(context).size.height-500, width: MediaQuery.of(context).size.width,child: Center(child: const CircularProgressIndicator()));
+        return SizedBox(
+            height: MediaQuery.of(context).size.height - 500,
+            width: MediaQuery.of(context).size.width,
+            child: const Center(child: CircularProgressIndicator()));
       },
       future: getContactById(id),
     );
