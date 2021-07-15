@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +8,9 @@ import 'package:http/http.dart' as http;
 
 import 'second_screen.dart';
 
-//const String host = 'http://192.168.254.105:5000';
+const String host = 'http://192.168.254.104:5000';
 //const String host = 'https://test-heroku-3154.herokuapp.com';
-const String host = 'https://phonebook-app-09120912.herokuapp.com';
+//const String host = 'https://phonebook-app-09120912.herokuapp.com';
 
 void main() => runApp(const PbApp());
 
@@ -60,6 +61,23 @@ class _InputContactFormState extends State<InputContactForm> {
   List<ContactLocal> namesTodo = <ContactLocal>[];
 
   int nPhoneNumber = 1;
+
+  Future<void> pokeApi() async {
+    final res = await http.get(Uri.parse('$host/user/profile'),
+    headers: {
+      HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYwZjAyM2ZjMTg2ZjdjMjI4MGMzYTdkMiIsImVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSJ9LCJpYXQiOjE2MjYzNTc1MjN9.S3dewCxm4jgyzksKQiv1z8tthzLxTB-n3IGp4L7f24I',
+    });
+
+    final resJson = jsonDecode(res.body);
+    print(resJson);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    pokeApi();
+  }
 
   void saveContact() {
     List<String> pnums = <String>[];
