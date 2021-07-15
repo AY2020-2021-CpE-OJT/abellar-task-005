@@ -379,7 +379,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
 
   @override
   Widget build(BuildContext context) {
-    late String id;
+    final List<String> id = [];
 
     return ListView.builder(
         controller: ScrollController(initialScrollOffset: 0),
@@ -391,8 +391,10 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                 child: ListTile(
                   title: FutureBuilder<Contacts>(
                     builder: (context, contact) {
+                      id.add('');
                       if (contact.hasData) {
-                        id = contact.data!.id.toString();
+                        id.removeAt(index);
+                        id.insert(index, contact.data!.id.toString());
                         return Text(
                             '${contact.data!.firstName.toString()} ${contact.data!.lastName.toString()}');
                       } else if (contact.hasError) {
@@ -419,7 +421,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                   onLongPress: () {
                     SecondScreen.of(context)!.editVisibilityOfWidget = true;
                     SecondScreen.of(context)!.editToBeEdit =
-                        buildEditWidget(index, false, id);
+                        buildEditWidget(index, false, id[index]);
                   },
                 ),
               ),
