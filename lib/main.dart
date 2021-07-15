@@ -14,6 +14,8 @@ const String host = 'http://192.168.254.104:5000';
 
 void main() => runApp(const PbApp());
 
+late String token;
+
 class ContactLocal {
   final String lastName;
   final String firstName;
@@ -62,20 +64,11 @@ class _InputContactFormState extends State<InputContactForm> {
 
   int nPhoneNumber = 1;
 
-  Future<void> pokeApi() async {
-    final res = await http.get(Uri.parse('$host/user/profile'),
-    headers: {
-      HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYwZjAyM2ZjMTg2ZjdjMjI4MGMzYTdkMiIsImVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSJ9LCJpYXQiOjE2MjYzNTc1MjN9.S3dewCxm4jgyzksKQiv1z8tthzLxTB-n3IGp4L7f24I',
-    });
-
-    final resJson = jsonDecode(res.body);
-    print(resJson);
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    loginPhonebook();
     pokeApi();
   }
 
@@ -271,6 +264,28 @@ Future<Contacts> getContactById(String id) async {
 
 deleteContact(String id) async {
   await http.delete(Uri.parse('$host/contacts/delete/$id'));
+}
+
+pokeApi() async {
+  final res = await http.get(Uri.parse('$host/user/profile'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYwZjAyM2ZjMTg2ZjdjMjI4MGMzYTdkMiIsImVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSJ9LCJpYXQiOjE2MjYzNTc1MjN9.S3dewCxm4jgyzksKQiv1z8tthzLxTB-n3IGp4L7f24I',
+      });
+
+  final resJson = jsonDecode(res.body);
+  print(resJson);
+}
+
+loginPhonebook() async {
+  final res = await http.post(Uri.parse('$host/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<dynamic, dynamic>{
+        'email': "example@example.com",
+        'password': "password"
+      }));
+  print(jsonDecode(res.body));
 }
 
 class Contacts {
