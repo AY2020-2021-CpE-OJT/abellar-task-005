@@ -60,6 +60,7 @@ class _EditContactWidgetState extends State<EditContactWidget> {
           const EdgeInsets.only(top: 75, left: 10, right: 10, bottom: 75),
           child: Center(
             child: FittedBox(
+              fit: BoxFit.none,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 350,),
                 child: Container(
