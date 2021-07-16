@@ -26,7 +26,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
       setState(() {
         futureNumOfContacts = int.parse(value);
         for (int i = 0; i < futureNumOfContacts; i++) {
-          futureContacts.insert(i, fetchContacts(i));
+          futureContacts.insert(i, fetchSecureContacts(i));
         }
       });
     });
@@ -351,7 +351,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                           i < futureNumOfContacts;
                                           i++) {
                                         futureContacts.insert(
-                                            i, fetchContacts(i));
+                                            i, fetchSecureContacts(i));
                                       }
                                     });
                                   });
