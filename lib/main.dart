@@ -306,10 +306,17 @@ Future<Contacts> getContactById(String id) async {
 }
 
 deleteContact(String id) async {
-  await http.delete(Uri.parse('$host/contacts/delete/$id'));
+  await http.delete(Uri.parse('$host/contacts/$id'));
 }
 
 deleteSecureContact(String id) async {
+  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+    'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
+    'email': "example@example.com",
+    'password': "password"
+  }));
+  final String token = jsonDecode(res1.body)['token'];
+
   await http.delete(Uri.parse('$host/contacts/delete/$id'));
 }
 
