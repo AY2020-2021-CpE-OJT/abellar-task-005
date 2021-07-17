@@ -296,6 +296,24 @@ Future<Contacts> getContactById(String id) async {
   }
 }
 
+Future<Contacts> getSecureContactById(String id) async {
+  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+    'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
+    'email': "guest",
+    'password': "guest"
+  }));
+  final String token = jsonDecode(res1.body)['token'];
+
+
+  final res = await http.get(Uri.parse('$host/user/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
+
+  if (res.statusCode == 200) {
+    return Contacts.fromJson(jsonDecode(res.body));
+  } else {
+    throw Exception('Failed to get contact');
+  }
+}
+
 deleteContact(String id) async {
   await http.delete(Uri.parse('$host/contacts/$id'));
 }

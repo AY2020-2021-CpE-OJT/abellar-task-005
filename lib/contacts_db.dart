@@ -373,7 +373,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
             width: MediaQuery.of(context).size.width,
             child: const Center(child: CircularProgressIndicator()));
       },
-      future: getContactById(id),
+      future: getSecureContactById(id),
     );
   }
 
