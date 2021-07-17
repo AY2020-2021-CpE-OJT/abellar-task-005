@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,25 @@ updateContact(String lName, String fName, List<dynamic> pNumbers,
   await http.put(Uri.parse('$host/contacts/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
+      },
+      body: jsonEncode(<dynamic, dynamic>{
+        'last_name': lName,
+        'first_name': fName,
+        'phone_numbers': pNumbers
+      }));
+}
+
+updateSecureContact(String lName, String fName, List<dynamic> pNumbers, String id) async {
+  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+    'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
+    'email': "guest",
+    'password': "guest"
+  }));
+  final String token = jsonDecode(res1.body)['token'];
+
+  await http.put(Uri.parse('$host/user/contacts/$id'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8', HttpHeaders.authorizationHeader: 'Bearer $token'
       },
       body: jsonEncode(<dynamic, dynamic>{
         'last_name': lName,

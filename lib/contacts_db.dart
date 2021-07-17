@@ -102,7 +102,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                             child: const Text('Cancel')),
                                         TextButton(
                                             onPressed: () {
-                                              deleteContact(
+                                              deleteSecureContact(
                                                   contact.data!.id.toString());
                                               futureNumOfContacts--;
                                               fetchNumOfContacts()
@@ -217,7 +217,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                             child: const Text('Cancel')),
                                         TextButton(
                                             onPressed: () {
-                                              deleteContact(
+                                              deleteSecureContact(
                                                   contact.data!.id.toString());
                                               futureNumOfContacts--;
                                               fetchNumOfContacts()
@@ -334,7 +334,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                       i++) {
                                     pNumbers.add(pNumbersCtrl[i].text);
                                   }
-                                  updateContact(
+                                  updateSecureContact(
                                       lNameEditCtrl.text,
                                       fNameEditCtrl.text,
                                       pNumbers,
@@ -429,7 +429,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                 builder: (context, contact) {
                   return OutlinedButton(
                     onPressed: () {
-                      deleteContact(contact.data!.id.toString());
+                      deleteSecureContact(contact.data!.id.toString());
                       fetchNumOfContacts().then((value) {
                         setState(() {
                           futureContacts.removeAt(index);

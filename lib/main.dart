@@ -8,9 +8,9 @@ import 'package:http/http.dart' as http;
 
 import 'second_screen.dart';
 
-const String host = 'http://192.168.254.104:5000';
+//const String host = 'http://192.168.254.104:5000';
 //const String host = 'https://test-heroku-3154.herokuapp.com';
-//const String host = 'https://phonebook-app-09120912.herokuapp.com';
+const String host = 'https://phonebook-app-09120912.herokuapp.com';
 
 void main() => runApp(const PbApp());
 
@@ -115,120 +115,111 @@ class _InputContactFormState extends State<InputContactForm> {
   @override
   Widget build(BuildContext context) {
 
-    return FutureBuilder(
-      future: loginPhonebook(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              children: [
-                Row(
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(
+                  Icons.account_circle_rounded,
+                  size: 100.0,
+                ),
+              ),
+              Expanded(
+                child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.account_circle_rounded,
-                        size: 100.0,
-                      ),
+                    TextFormField(
+                      textCapitalization: TextCapitalization.words,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'First Name'),
+                      controller: fnameCtrlr,
                     ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            textCapitalization: TextCapitalization.words,
-                            decoration: const InputDecoration(
-                                border: UnderlineInputBorder(),
-                                labelText: 'First Name'),
-                            controller: fnameCtrlr,
-                          ),
-                          TextFormField(
-                            decoration: const InputDecoration(
-                                border: UnderlineInputBorder(),
-                                labelText: 'Last Name'),
-                            controller: lnameCtrlr,
-                          ),
-                        ],
-                      ),
+                    TextFormField(
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Last Name'),
+                      controller: lnameCtrlr,
                     ),
                   ],
                 ),
-                Flexible(
-                  flex: 0,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minHeight: 0.0,
-                        maxHeight: MediaQuery.of(context).size.height - 350),
-                    child: ListView.builder(
-                      controller: ScrollController(initialScrollOffset: 0),
-                      shrinkWrap: true,
-                      itemBuilder: (context, i) {
-                        return ListTile(
-                          title: TextFormField(
-                            decoration: InputDecoration(
-                                border: const UnderlineInputBorder(),
-                                labelText: 'Phone Number #${i + 1}'),
-                            controller: pnumCtrlrs[i],
-                            keyboardType: TextInputType.number,
-                          ),
-                        );
-                      },
-                      itemCount: nPhoneNumber,
+              ),
+            ],
+          ),
+          Flexible(
+            flex: 0,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  minHeight: 0.0,
+                  maxHeight: MediaQuery.of(context).size.height - 350),
+              child: ListView.builder(
+                controller: ScrollController(initialScrollOffset: 0),
+                shrinkWrap: true,
+                itemBuilder: (context, i) {
+                  return ListTile(
+                    title: TextFormField(
+                      decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: 'Phone Number #${i + 1}'),
+                      controller: pnumCtrlrs[i],
+                      keyboardType: TextInputType.number,
                     ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    OutlinedButton(
-                      onPressed: addPhoneNumber,
-                      child: const Icon(Icons.add),
-                      style: OutlinedButton.styleFrom(shape: const CircleBorder()),
-                    ),
-                    OutlinedButton(
-                      onPressed: subPhoneNumber,
-                      child: const Icon(Icons.remove),
-                      style: OutlinedButton.styleFrom(shape: const CircleBorder()),
-                    ),
-                  ],
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 2.0),
-                            child: ElevatedButton(
-                              onPressed: saveContact,
-                              child: const Text('Submit'),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 2.0),
-                            child: ElevatedButton(
-                              onPressed: gotoNextScreen,
-                              style: ElevatedButton.styleFrom(primary: Colors.grey),
-                              child: const Text('View'),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
+                  );
+                },
+                itemCount: nPhoneNumber,
+              ),
             ),
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      }
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              OutlinedButton(
+                onPressed: addPhoneNumber,
+                child: const Icon(Icons.add),
+                style: OutlinedButton.styleFrom(shape: const CircleBorder()),
+              ),
+              OutlinedButton(
+                onPressed: subPhoneNumber,
+                child: const Icon(Icons.remove),
+                style: OutlinedButton.styleFrom(shape: const CircleBorder()),
+              ),
+            ],
+          ),
+          Flexible(
+            fit: FlexFit.loose,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 2.0),
+                      child: ElevatedButton(
+                        onPressed: saveContact,
+                        child: const Text('Submit'),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 2.0),
+                      child: ElevatedButton(
+                        onPressed: gotoNextScreen,
+                        style: ElevatedButton.styleFrom(primary: Colors.grey),
+                        child: const Text('View'),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -249,8 +240,8 @@ createContacts(
 createSecureContacts(String lastName, String firstName, List<dynamic> phoneNumbers) async {
   final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
-    'email': "example@example.com",
-    'password': "password"
+    'email': "guest",
+    'password': "guest"
   }));
   final String token = jsonDecode(res1.body)['token'];
 
@@ -278,8 +269,8 @@ Future<Contacts> fetchContacts(int index) async {
 Future<Contacts> fetchSecureContacts(int index) async {
   final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
-      'email': "example@example.com",
-      'password': "password"
+      'email': "guest",
+      'password': "guest"
     }));
   final String token = jsonDecode(res1.body)['token'];
 
@@ -312,12 +303,12 @@ deleteContact(String id) async {
 deleteSecureContact(String id) async {
   final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
-    'email': "example@example.com",
-    'password': "password"
+    'email': "guest",
+    'password': "guest"
   }));
   final String token = jsonDecode(res1.body)['token'];
 
-  await http.delete(Uri.parse('$host/contacts/delete/$id'));
+  await http.delete(Uri.parse('$host/user/contacts/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
 }
 
 // pokeApi() async {
@@ -336,8 +327,8 @@ loginPhonebook() async {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<dynamic, dynamic>{
-        'email': "example@example.com",
-        'password': "password"
+        'email': "guest",
+        'password': "guest"
       }));
   //token = jsonDecode(res.body);
 }
