@@ -347,7 +347,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                   futureContacts.clear();
                                   fetchNumOfContacts().then((value) {
                                     setState(() {
-                                      futureNumOfContacts = int.parse(value);
+                                      futureNumOfContacts = value;
                                       for (int i = 0;
                                           i < futureNumOfContacts;
                                           i++) {

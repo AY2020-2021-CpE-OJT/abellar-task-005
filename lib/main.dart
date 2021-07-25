@@ -309,7 +309,7 @@ Future<Contacts> getSecureContactById(String id) async {
   final res = await http.get(Uri.parse('$host/users/contacts/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
 
   if (res.statusCode == 200) {
-    return Contacts.fromJson(jsonDecode(res.body));
+    return Contacts.fromJson(jsonDecode(res.body)['contact']);
   } else {
     throw Exception('Failed to get contact');
   }

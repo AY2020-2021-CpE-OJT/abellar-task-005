@@ -62,9 +62,8 @@ class _EditContactWidgetState extends State<EditContactWidget> {
   @override
   Widget build(BuildContext context) {
     bool visibility = widget.visibility;
-    return Visibility(
-      visible: visibility,
-      child: Stack(children: [
+    if(visibility) {
+      return Stack(children: [
         InkWell(
           onTap: () {
             setState(() {
@@ -108,7 +107,12 @@ class _EditContactWidgetState extends State<EditContactWidget> {
             ),
           ),
         ),
-      ]),
-    );
+      ]);
+    } else {
+      return const SizedBox(
+        height: 0,
+        width: 0,
+      );
+    }
   }
 }
