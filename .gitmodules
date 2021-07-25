@@ -1,3 +1,6 @@
 [submodule "API-server"]
 	path = API-server
 	url = https://github.com/leviabellar/API-server.git
+[submodule "abellar-api-phonebook"]
+	path = abellar-api-phonebook
+	url = https://github.com/leviabellar/abellar-api-phonebook.git
