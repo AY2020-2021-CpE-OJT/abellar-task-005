@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:abellar_task_003/edit_widget.dart';
 import 'package:abellar_task_003/second_screen.dart';
@@ -24,7 +25,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
     super.initState();
     fetchNumOfContacts().then((value) {
       setState(() {
-        futureNumOfContacts = int.parse(value);
+        futureNumOfContacts = value;
         for (int i = 0; i < futureNumOfContacts; i++) {
           futureContacts.insert(i, fetchSecureContacts(i));
         }
@@ -33,8 +34,8 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
   }
 
   fetchNumOfContacts() async {
-    final req = await http.get(Uri.parse('$host/contacts/total'));
-    return req.body;
+    final res = await http.get(Uri.parse('$host/contacts'));
+    return jsonDecode(res.body)['total_results'];
   }
 
   final lNameEditCtrl = TextEditingController();

@@ -10,7 +10,8 @@ import 'second_screen.dart';
 
 //const String host = 'http://192.168.254.104:5000';
 //const String host = 'https://test-heroku-3154.herokuapp.com';
-const String host = 'https://phonebook-app-09120912.herokuapp.com';
+//const String host = 'https://phonebook-app-09120912.herokuapp.com';
+const String host = 'https://phonebook-abellar-api.herokuapp.com';
 
 void main() => runApp(const PbApp());
 
@@ -238,14 +239,14 @@ createContacts(
 }
 
 createSecureContacts(String lastName, String firstName, List<dynamic> phoneNumbers) async {
-  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+  final res1 = await http.post(Uri.parse('$host/users/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
     'email': "guest",
     'password': "guest"
   }));
   final String token = jsonDecode(res1.body)['token'];
 
-  await http.post(Uri.parse('$host/user/contacts'),
+  await http.post(Uri.parse('$host/users/contacts'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8', HttpHeaders.authorizationHeader: 'Bearer $token'
       },
@@ -267,7 +268,7 @@ Future<Contacts> fetchContacts(int index) async {
 }
 
 Future<Contacts> fetchSecureContacts(int index) async {
-  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+  final res1 = await http.post(Uri.parse('$host/users/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
       'email': "guest",
       'password': "guest"
@@ -275,11 +276,11 @@ Future<Contacts> fetchSecureContacts(int index) async {
   final String token = jsonDecode(res1.body)['token'];
 
 
-  final res = await http.get(Uri.parse('$host/user/contacts'),
+  final res = await http.get(Uri.parse('$host/users/contacts'),
   headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
 
   if (res.statusCode == 200) {
-    return Contacts.fromJson(jsonDecode(res.body)[index]);
+    return Contacts.fromJson(jsonDecode(res.body)['contacts'][index]);
   } else {
     throw Exception('Failed to load contacts');
   }
@@ -287,7 +288,7 @@ Future<Contacts> fetchSecureContacts(int index) async {
 
 
 Future<Contacts> getContactById(String id) async {
-  final res = await http.get(Uri.parse('$host/$id'));
+  final res = await http.get(Uri.parse('$host/contacts/$id'));
 
   if (res.statusCode == 200) {
     return Contacts.fromJson(jsonDecode(res.body));
@@ -297,7 +298,7 @@ Future<Contacts> getContactById(String id) async {
 }
 
 Future<Contacts> getSecureContactById(String id) async {
-  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+  final res1 = await http.post(Uri.parse('$host/users/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
     'email': "guest",
     'password': "guest"
@@ -305,7 +306,7 @@ Future<Contacts> getSecureContactById(String id) async {
   final String token = jsonDecode(res1.body)['token'];
 
 
-  final res = await http.get(Uri.parse('$host/user/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
+  final res = await http.get(Uri.parse('$host/users/contacts/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
 
   if (res.statusCode == 200) {
     return Contacts.fromJson(jsonDecode(res.body));
@@ -319,14 +320,14 @@ deleteContact(String id) async {
 }
 
 deleteSecureContact(String id) async {
-  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+  final res1 = await http.post(Uri.parse('$host/users/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
     'email': "guest",
     'password': "guest"
   }));
   final String token = jsonDecode(res1.body)['token'];
 
-  await http.delete(Uri.parse('$host/user/contacts/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
+  await http.delete(Uri.parse('$host/users/contacts/$id'), headers: { HttpHeaders.authorizationHeader: 'Bearer $token' });
 }
 
 // pokeApi() async {

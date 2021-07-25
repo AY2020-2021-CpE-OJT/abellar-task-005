@@ -24,14 +24,14 @@ updateContact(String lName, String fName, List<dynamic> pNumbers,
 }
 
 updateSecureContact(String lName, String fName, List<dynamic> pNumbers, String id) async {
-  final res1 = await http.post(Uri.parse('$host/login'), headers: <String, String> {
+  final res1 = await http.post(Uri.parse('$host/users/login'), headers: <String, String> {
     'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(<dynamic, dynamic> {
     'email': "guest",
     'password': "guest"
   }));
   final String token = jsonDecode(res1.body)['token'];
 
-  await http.put(Uri.parse('$host/user/contacts/$id'),
+  await http.put(Uri.parse('$host/users/contacts/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8', HttpHeaders.authorizationHeader: 'Bearer $token'
       },
