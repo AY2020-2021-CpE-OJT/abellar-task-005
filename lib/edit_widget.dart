@@ -64,15 +64,8 @@ class _EditContactWidgetState extends State<EditContactWidget> {
     bool visibility = widget.visibility;
     if(visibility) {
       return Stack(children: [
-        InkWell(
-          onTap: () {
-            setState(() {
-              SecondScreen.of(context)!.editVisibilityOfWidget = false;
-            });
-          },
-          child: Container(
-            color: Colors.black.withOpacity(0.75),
-          ),
+        Container(
+          color: Colors.black.withOpacity(0.75),
         ),
         Padding(
           padding:
