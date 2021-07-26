@@ -5,6 +5,7 @@ import 'package:abellar_task_003/edit_widget.dart';
 import 'package:abellar_task_003/second_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 import 'main.dart';
 
@@ -18,7 +19,6 @@ class ContactsFromDatabase extends StatefulWidget {
 class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
   List<Future<Contacts>> futureContacts = <Future<Contacts>>[];
   late int futureNumOfContacts = 0;
-  int pnAdd = 0;
 
   @override
   void initState() {
@@ -46,8 +46,9 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
     return FutureBuilder(
       builder: (context, contact) {
         if (contact.hasData) {
+          int pnAdd = 0;
           for (int i = 0; i < contact.data!.phoneNumbers.length + pnAdd; i++) {
-            pNumbersCtrl.add(TextEditingController());
+            if (pNumbersCtrl.length != contact.data!.phoneNumbers.length + pnAdd) pNumbersCtrl.add(TextEditingController());
           }
           return ConstrainedBox(
             constraints: BoxConstraints(
@@ -292,6 +293,10 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                               controller: pNumbersCtrl[index],
                               decoration: InputDecoration(
                                   labelText: 'Phone Number #${index + 1}'),
+                              inputFormatters: [
+                                MaskedInputFormatter('###-#####', anyCharMatcher: RegExp('[0-9]')),
+                              ],
+                              keyboardType: TextInputType.number,
                             );
                           }),
                     ),
@@ -304,6 +309,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                             OutlinedButton(
                               onPressed: () {
                                 pnAdd++;
+                                print(pnAdd);
                                 SecondScreen.of(context)!.editToBeEdit =
                                     buildEditWidget(index, true, id);
                               },
@@ -313,9 +319,9 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                             ),
                             OutlinedButton(
                               onPressed: () {
-                                if (contact.data!.phoneNumbers.length + pnAdd >
-                                    0) {
+                                if (contact.data!.phoneNumbers.length + pnAdd > 0) {
                                   pnAdd--;
+                                  pNumbersCtrl.removeAt(pNumbersCtrl.length-1);
                                 }
                                 SecondScreen.of(context)!.editToBeEdit =
                                     buildEditWidget(index, true, id);
@@ -330,9 +336,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                 onPressed: () {
                                   //Update
                                   List<String> pNumbers = [];
-                                  for (int i = 0;
-                                      i < pNumbersCtrl.length;
-                                      i++) {
+                                  for (int i = 0; i < pNumbersCtrl.length; i++) {
                                     pNumbers.add(pNumbersCtrl[i].text);
                                   }
                                   updateSecureContact(
@@ -348,11 +352,8 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                   fetchNumOfContacts().then((value) {
                                     setState(() {
                                       futureNumOfContacts = value;
-                                      for (int i = 0;
-                                          i < futureNumOfContacts;
-                                          i++) {
-                                        futureContacts.insert(
-                                            i, fetchSecureContacts(i));
+                                      for (int i = 0; i < futureNumOfContacts; i++) {
+                                        futureContacts.insert(i, fetchSecureContacts(i));
                                       }
                                     });
                                   });
