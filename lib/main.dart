@@ -174,9 +174,10 @@ class _InputContactFormState extends State<InputContactForm> {
                             border: const UnderlineInputBorder(),
                             labelText: 'Phone Number #${i + 1}'),
                         controller: pnumCtrlrs[i],
-                        keyboardType: TextInputType.phone,
+                        keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          MaskedInputFormatter('###-#####')
+                          MaskedInputFormatter('###-#####'),
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
                         validator: (val) {
                           if (val == null || val.isEmpty) return 'Phone number is required';
