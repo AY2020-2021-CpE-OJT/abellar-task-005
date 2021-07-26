@@ -151,9 +151,15 @@ class _InputContactFormState extends State<InputContactForm> {
                           if ((val == null || val.isEmpty) && lnameCtrlr.text.isEmpty) return 'At least one of the name is required';
                           return null;
                         },
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'First Name'),
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: 'First Name',
+                          suffixIcon: fnameCtrlr.text.isNotEmpty ? IconButton(onPressed: () {
+                            setState(() {
+                              fnameCtrlr.clear();
+                            });
+                          }, icon: const Icon(Icons.clear), iconSize: 20,) : const SizedBox(height: 0, width: 0,),
+                        ),
                         controller: fnameCtrlr,
                       ),
                       TextFormField(
@@ -162,9 +168,15 @@ class _InputContactFormState extends State<InputContactForm> {
                           if ((val == null || val.isEmpty) && fnameCtrlr.text.isEmpty) return 'At least one of the name is required';
                           return null;
                         },
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Last Name'),
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: 'Last Name',
+                          suffixIcon: lnameCtrlr.text.isNotEmpty ? IconButton(onPressed: () {
+                            setState(() {
+                              lnameCtrlr.clear();
+                            });
+                          }, icon: const Icon(Icons.clear), iconSize: 20,) : const SizedBox(height: 0, width: 0,),
+                        ),
                         controller: lnameCtrlr,
                       ),
                     ],
@@ -184,9 +196,6 @@ class _InputContactFormState extends State<InputContactForm> {
                   itemBuilder: (context, i) {
                     return ListTile(
                       title: TextFormField(
-                        decoration: InputDecoration(
-                            border: const UnderlineInputBorder(),
-                            labelText: 'Phone Number #${i + 1}'),
                         controller: pnumCtrlrs[i],
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -197,6 +206,15 @@ class _InputContactFormState extends State<InputContactForm> {
                           if (val.length != 9) return 'Incomplete phone number';
                           return null;
                         },
+                        decoration: InputDecoration(
+                          border: const UnderlineInputBorder(),
+                          labelText: 'Phone Number #${i + 1}',
+                          suffixIcon: pnumCtrlrs[i].text.isNotEmpty ? IconButton(onPressed: () {
+                            setState(() {
+                              pnumCtrlrs[i].clear();
+                            });
+                          }, icon: const Icon(Icons.clear), iconSize: 20,) : const SizedBox(height: 0, width: 0,),
+                        ),
                       ),
                     );
                   },
