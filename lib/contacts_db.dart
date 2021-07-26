@@ -338,6 +338,8 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                   for (int i = 0; i < pNumbersCtrl.length; i++) {
                                     pNumbers.add(pNumbersCtrl[i].text);
                                   }
+                                  if (lNameEditCtrl.text.isEmpty) lNameEditCtrl.text = contact.data!.lastName;
+                                  if (fNameEditCtrl.text.isEmpty) fNameEditCtrl.text = contact.data!.firstName;
                                   updateSecureContact(
                                       lNameEditCtrl.text,
                                       fNameEditCtrl.text,
@@ -356,7 +358,10 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                       }
                                     });
                                   });
+                                  //disposal
                                   pnAdd = 0;
+                                  lNameEditCtrl.dispose();
+                                  fNameEditCtrl.dispose();
                                 },
                               ),
                             ),
