@@ -269,6 +269,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                 padding: const EdgeInsets.only(right: 5.0),
                                 child: TextFormField(
                                   controller: fNameEditCtrl,
+                                  textCapitalization: TextCapitalization.words,
                                   decoration: InputDecoration(
                                       hintText:
                                           contact.data!.firstName.toString()),
@@ -278,6 +279,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                             Expanded(
                               child: TextFormField(
                                 controller: lNameEditCtrl,
+                                textCapitalization: TextCapitalization.words,
                                 decoration: InputDecoration(
                                   hintText: contact.data!.lastName.toString(),
                                 ),
