@@ -44,6 +44,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
 
   FutureBuilder<Contacts> buildEditWidget(int index, bool edit, String id) {
     List<TextEditingController> pNumbersCtrl = [];
+    final _formKey = GlobalKey<FormState>();
     return FutureBuilder(
       builder: (context, contact) {
         if (contact.hasData) {
@@ -187,189 +188,199 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
               ),
               Visibility(
                 visible: edit,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          OutlinedButton(
-                            onPressed: () {},
-                            child: const Icon(
-                              Icons.call,
-                              size: 10,
-                            ),
-                            style: OutlinedButton.styleFrom(
-                                shape: const CircleBorder()),
-                          ),
-                          OutlinedButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('Delete'),
-                                      content: const Text(
-                                          'Are you sure you want to delete this contact?'),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text('Cancel')),
-                                        TextButton(
-                                            onPressed: () {
-                                              deleteSecureContact(
-                                                  contact.data!.id.toString());
-                                              futureNumOfContacts--;
-                                              fetchNumOfContacts()
-                                                  .then((value) {
-                                                setState(() {
-                                                  futureContacts
-                                                      .removeAt(index);
-                                                });
-                                              });
-                                              SecondScreen.of(super.context)!
-                                                      .editVisibilityOfWidget =
-                                                  false;
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text('Yes'))
-                                      ],
-                                    );
-                                  });
-                            },
-                            child: const Icon(
-                              Icons.delete,
-                              size: 10,
-                            ),
-                            style: OutlinedButton.styleFrom(
-                                shape: const CircleBorder()),
-                          ),
-                          OutlinedButton(
-                            onPressed: () {},
-                            child: const Icon(
-                              Icons.edit,
-                              size: 10,
-                            ),
-                            style: OutlinedButton.styleFrom(
-                                shape: const CircleBorder()),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Flexible(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 5.0),
-                              child: TextFormField(
-                                controller: fNameEditCtrl,
-                                decoration: InputDecoration(
-                                    hintText:
-                                        contact.data!.firstName.toString()),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                              controller: lNameEditCtrl,
-                              decoration: InputDecoration(
-                                hintText: contact.data!.lastName.toString(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 3,
-                      child: ListView.builder(
-                          controller: ScrollController(initialScrollOffset: 0),
-                          itemCount: contact.data!.phoneNumbers.length + pnAdd,
-                          itemBuilder: (context, index) {
-                            return TextFormField(
-                              controller: pNumbersCtrl[index],
-                              decoration: InputDecoration(
-                                  labelText: 'Phone Number #${index + 1}'),
-                              inputFormatters: [
-                                MaskedInputFormatter('###-#####', anyCharMatcher: RegExp('[0-9]')),
-                              ],
-                              keyboardType: TextInputType.number,
-                            );
-                          }),
-                    ),
-                    Flexible(
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             OutlinedButton(
-                              onPressed: () {
-                                pnAdd++;
-                                SecondScreen.of(context)!.editToBeEdit =
-                                    buildEditWidget(index, true, id);
-                              },
-                              child: const Icon(Icons.add),
+                              onPressed: () {},
+                              child: const Icon(
+                                Icons.call,
+                                size: 10,
+                              ),
                               style: OutlinedButton.styleFrom(
                                   shape: const CircleBorder()),
                             ),
                             OutlinedButton(
                               onPressed: () {
-                                if (contact.data!.phoneNumbers.length + pnAdd > 0) {
-                                  pnAdd--;
-                                  pNumbersCtrl.removeAt(pNumbersCtrl.length-1);
-                                }
-                                SecondScreen.of(context)!.editToBeEdit =
-                                    buildEditWidget(index, true, id);
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: const Text('Delete'),
+                                        content: const Text(
+                                            'Are you sure you want to delete this contact?'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                              child: const Text('Cancel')),
+                                          TextButton(
+                                              onPressed: () {
+                                                deleteSecureContact(
+                                                    contact.data!.id.toString());
+                                                futureNumOfContacts--;
+                                                fetchNumOfContacts()
+                                                    .then((value) {
+                                                  setState(() {
+                                                    futureContacts
+                                                        .removeAt(index);
+                                                  });
+                                                });
+                                                SecondScreen.of(super.context)!
+                                                        .editVisibilityOfWidget =
+                                                    false;
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Yes'))
+                                        ],
+                                      );
+                                    });
                               },
-                              child: const Icon(Icons.remove),
+                              child: const Icon(
+                                Icons.delete,
+                                size: 10,
+                              ),
                               style: OutlinedButton.styleFrom(
                                   shape: const CircleBorder()),
                             ),
+                            OutlinedButton(
+                              onPressed: () {},
+                              child: const Icon(
+                                Icons.edit,
+                                size: 10,
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                  shape: const CircleBorder()),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Flexible(
+                        child: Row(
+                          children: [
                             Expanded(
-                              child: ElevatedButton(
-                                child: const Text('Confirm'),
-                                onPressed: () {
-                                  //Update
-                                  List<String> pNumbers = [];
-                                  for (int i = 0; i < pNumbersCtrl.length; i++) {
-                                    pNumbers.add(pNumbersCtrl[i].text);
-                                  }
-                                  if (lNameEditCtrl.text.isEmpty) lNameEditCtrl.text = contact.data!.lastName;
-                                  if (fNameEditCtrl.text.isEmpty) fNameEditCtrl.text = contact.data!.firstName;
-                                  updateSecureContact(
-                                      lNameEditCtrl.text,
-                                      fNameEditCtrl.text,
-                                      pNumbers,
-                                      contact.data!.id);
-                                  setState(() {
-                                    SecondScreen.of(context)!
-                                        .editVisibilityOfWidget = false;
-                                  });
-                                  futureContacts.clear();
-                                  fetchNumOfContacts().then((value) {
-                                    setState(() {
-                                      futureNumOfContacts = value;
-                                      for (int i = 0; i < futureNumOfContacts; i++) {
-                                        futureContacts.insert(i, fetchSecureContacts(i));
-                                      }
-                                    });
-                                  });
-                                  //disposal
-                                  pnAdd = 0;
-                                  lNameEditCtrl.dispose();
-                                  fNameEditCtrl.dispose();
-                                },
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 5.0),
+                                child: TextFormField(
+                                  controller: fNameEditCtrl,
+                                  decoration: InputDecoration(
+                                      hintText:
+                                          contact.data!.firstName.toString()),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                controller: lNameEditCtrl,
+                                decoration: InputDecoration(
+                                  hintText: contact.data!.lastName.toString(),
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      Expanded(
+                        flex: 3,
+                        child: ListView.builder(
+                            controller: ScrollController(initialScrollOffset: 0),
+                            itemCount: contact.data!.phoneNumbers.length + pnAdd,
+                            itemBuilder: (context, index) {
+                              return TextFormField(
+                                controller: pNumbersCtrl[index],
+                                decoration: InputDecoration(
+                                    labelText: 'Phone Number #${index + 1}'),
+                                inputFormatters: [
+                                  MaskedInputFormatter('###-#####', anyCharMatcher: RegExp('[0-9]')),
+                                ],
+                                keyboardType: TextInputType.number,
+                                validator: (val) {
+                                  if (val == null || val.isEmpty) return 'Phone number is required';
+                                  return null;
+                                },
+                              );
+                            }),
+                      ),
+                      Flexible(
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              OutlinedButton(
+                                onPressed: () {
+                                  pnAdd++;
+                                  SecondScreen.of(context)!.editToBeEdit =
+                                      buildEditWidget(index, true, id);
+                                },
+                                child: const Icon(Icons.add),
+                                style: OutlinedButton.styleFrom(
+                                    shape: const CircleBorder()),
+                              ),
+                              OutlinedButton(
+                                onPressed: () {
+                                  if (contact.data!.phoneNumbers.length + pnAdd > 0) {
+                                    pnAdd--;
+                                    pNumbersCtrl.removeAt(pNumbersCtrl.length-1);
+                                  }
+                                  SecondScreen.of(context)!.editToBeEdit =
+                                      buildEditWidget(index, true, id);
+                                },
+                                child: const Icon(Icons.remove),
+                                style: OutlinedButton.styleFrom(
+                                    shape: const CircleBorder()),
+                              ),
+                              //confirm button
+                              Expanded(
+                                child: ElevatedButton(
+                                  child: const Text('Confirm'),
+                                  onPressed: () {
+                                    //Update
+                                    if (_formKey.currentState!.validate()) {
+                                      List<String> pNumbers = [];
+                                      for (int i = 0; i < pNumbersCtrl.length; i++) {
+                                        pNumbers.add(pNumbersCtrl[i].text);
+                                      }
+                                      if (lNameEditCtrl.text.isEmpty) lNameEditCtrl.text = contact.data!.lastName;
+                                      if (fNameEditCtrl.text.isEmpty) fNameEditCtrl.text = contact.data!.firstName;
+                                      updateSecureContact(
+                                          lNameEditCtrl.text,
+                                          fNameEditCtrl.text,
+                                          pNumbers,
+                                          contact.data!.id);
+                                      setState(() {
+                                        SecondScreen.of(context)!
+                                            .editVisibilityOfWidget = false;
+                                      });
+                                      futureContacts.clear();
+                                      fetchNumOfContacts().then((value) {
+                                        setState(() {
+                                          futureNumOfContacts = value;
+                                          for (int i = 0; i < futureNumOfContacts; i++) {
+                                            futureContacts.insert(i, fetchSecureContacts(i));
+                                          }
+                                        });
+                                      });
+                                      //disposal
+                                      pnAdd = 0;
+                                      lNameEditCtrl.text = "";
+                                      fNameEditCtrl.text = "";
+                                    }
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ]),
