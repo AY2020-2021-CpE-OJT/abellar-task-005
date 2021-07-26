@@ -40,13 +40,13 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
 
   final lNameEditCtrl = TextEditingController();
   final fNameEditCtrl = TextEditingController();
+  int pnAdd = 0;
 
   FutureBuilder<Contacts> buildEditWidget(int index, bool edit, String id) {
     List<TextEditingController> pNumbersCtrl = [];
     return FutureBuilder(
       builder: (context, contact) {
         if (contact.hasData) {
-          int pnAdd = 0;
           for (int i = 0; i < contact.data!.phoneNumbers.length + pnAdd; i++) {
             if (pNumbersCtrl.length != contact.data!.phoneNumbers.length + pnAdd) pNumbersCtrl.add(TextEditingController());
           }
@@ -309,7 +309,6 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                             OutlinedButton(
                               onPressed: () {
                                 pnAdd++;
-                                print(pnAdd);
                                 SecondScreen.of(context)!.editToBeEdit =
                                     buildEditWidget(index, true, id);
                               },
@@ -357,6 +356,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                       }
                                     });
                                   });
+                                  pnAdd = 0;
                                 },
                               ),
                             ),
