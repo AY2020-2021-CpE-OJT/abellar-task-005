@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 
 import 'second_screen.dart';
 
@@ -72,18 +73,20 @@ class _InputContactFormState extends State<InputContactForm> {
   }
 
   void saveContact() {
-    List<String> pnums = <String>[];
-    for (int i = 0; i < nPhoneNumber; i++) {
-      pnums.add(pnumCtrlrs[i].text);
+    if (_formKey.currentState!.validate()) {
+      List<String> pnums = <String>[];
+      for (int i = 0; i < nPhoneNumber; i++) {
+        pnums.add(pnumCtrlrs[i].text);
+      }
+      namesTodo.insert(0, ContactLocal(lnameCtrlr.text, fnameCtrlr.text, pnums));
+      createSecureContacts(lnameCtrlr.text, fnameCtrlr.text, pnums);
+
+      const snackBar = SnackBar(
+        content: Text('Successfully Submitted Contacts'),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    namesTodo.insert(0, ContactLocal(lnameCtrlr.text, fnameCtrlr.text, pnums));
-    createSecureContacts(lnameCtrlr.text, fnameCtrlr.text, pnums);
-
-    const snackBar = SnackBar(
-      content: Text('Successfully Submitted Contacts'),
-    );
-
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void gotoNextScreen() {
@@ -113,113 +116,126 @@ class _InputContactFormState extends State<InputContactForm> {
     TextEditingController()
   ];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
 
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(
-                  Icons.account_circle_rounded,
-                  size: 100.0,
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.account_circle_rounded,
+                    size: 100.0,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: 'First Name'),
+                        controller: fnameCtrlr,
+                      ),
+                      TextFormField(
+                        textCapitalization: TextCapitalization.words,
+                        decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            labelText: 'Last Name'),
+                        controller: lnameCtrlr,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Flexible(
+              flex: 0,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                    minHeight: 0.0,
+                    maxHeight: MediaQuery.of(context).size.height - 350),
+                child: ListView.builder(
+                  controller: ScrollController(initialScrollOffset: 0),
+                  shrinkWrap: true,
+                  itemBuilder: (context, i) {
+                    return ListTile(
+                      title: TextFormField(
+                        decoration: InputDecoration(
+                            border: const UnderlineInputBorder(),
+                            labelText: 'Phone Number #${i + 1}'),
+                        controller: pnumCtrlrs[i],
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: <TextInputFormatter>[
+                          MaskedInputFormatter('###-#####')
+                        ],
+                        validator: (val) {
+                          if (val == null || val.isEmpty) return 'Phone number is required';
+                          return null;
+                        },
+                      ),
+                    );
+                  },
+                  itemCount: nPhoneNumber,
                 ),
               ),
-              Expanded(
-                child: Column(
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                OutlinedButton(
+                  onPressed: addPhoneNumber,
+                  child: const Icon(Icons.add),
+                  style: OutlinedButton.styleFrom(shape: const CircleBorder()),
+                ),
+                OutlinedButton(
+                  onPressed: subPhoneNumber,
+                  child: const Icon(Icons.remove),
+                  style: OutlinedButton.styleFrom(shape: const CircleBorder()),
+                ),
+              ],
+            ),
+            Flexible(
+              fit: FlexFit.loose,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    TextFormField(
-                      textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'First Name'),
-                      controller: fnameCtrlr,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 2.0),
+                        child: ElevatedButton(
+                          onPressed: saveContact,
+                          child: const Text('Submit'),
+                        ),
+                      ),
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'Last Name'),
-                      controller: lnameCtrlr,
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2.0),
+                        child: ElevatedButton(
+                          onPressed: gotoNextScreen,
+                          style: ElevatedButton.styleFrom(primary: Colors.grey),
+                          child: const Text('View'),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ],
-          ),
-          Flexible(
-            flex: 0,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                  minHeight: 0.0,
-                  maxHeight: MediaQuery.of(context).size.height - 350),
-              child: ListView.builder(
-                controller: ScrollController(initialScrollOffset: 0),
-                shrinkWrap: true,
-                itemBuilder: (context, i) {
-                  return ListTile(
-                    title: TextFormField(
-                      decoration: InputDecoration(
-                          border: const UnderlineInputBorder(),
-                          labelText: 'Phone Number #${i + 1}'),
-                      controller: pnumCtrlrs[i],
-                      keyboardType: TextInputType.number,
-                    ),
-                  );
-                },
-                itemCount: nPhoneNumber,
-              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              OutlinedButton(
-                onPressed: addPhoneNumber,
-                child: const Icon(Icons.add),
-                style: OutlinedButton.styleFrom(shape: const CircleBorder()),
-              ),
-              OutlinedButton(
-                onPressed: subPhoneNumber,
-                child: const Icon(Icons.remove),
-                style: OutlinedButton.styleFrom(shape: const CircleBorder()),
-              ),
-            ],
-          ),
-          Flexible(
-            fit: FlexFit.loose,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 2.0),
-                      child: ElevatedButton(
-                        onPressed: saveContact,
-                        child: const Text('Submit'),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 2.0),
-                      child: ElevatedButton(
-                        onPressed: gotoNextScreen,
-                        style: ElevatedButton.styleFrom(primary: Colors.grey),
-                        child: const Text('View'),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
