@@ -86,6 +86,12 @@ class _InputContactFormState extends State<InputContactForm> {
       );
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+      fnameCtrlr.clear();
+      lnameCtrlr.clear();
+      for (int i = 0; i < pnumCtrlrs.length; i++) {
+        pnumCtrlrs[i].clear();
+      }
     }
   }
 
