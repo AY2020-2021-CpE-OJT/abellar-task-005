@@ -184,11 +184,11 @@ class _InputContactFormState extends State<InputContactForm> {
                         controller: pnumCtrlrs[i],
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          MaskedInputFormatter('###-#####'),
-                          FilteringTextInputFormatter.digitsOnly,
+                          MaskedInputFormatter('###-#####', anyCharMatcher: RegExp('[0-9]')),
                         ],
                         validator: (val) {
                           if (val == null || val.isEmpty) return 'Phone number is required';
+                          if (val.length != 9) return 'Incomplete phone number';
                           return null;
                         },
                       ),
