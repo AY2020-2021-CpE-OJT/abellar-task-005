@@ -302,6 +302,7 @@ class _ContactsFromDatabaseState extends State<ContactsFromDatabase> {
                                 keyboardType: TextInputType.number,
                                 validator: (val) {
                                   if (val == null || val.isEmpty) return 'Phone number is required';
+                                  if (val.length != 9) return 'Incomplete phone number';
                                   return null;
                                 },
                               );
