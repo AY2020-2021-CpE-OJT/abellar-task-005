@@ -141,6 +141,10 @@ class _InputContactFormState extends State<InputContactForm> {
                     children: [
                       TextFormField(
                         textCapitalization: TextCapitalization.words,
+                        validator: (val) {
+                          if ((val == null || val.isEmpty) && lnameCtrlr.text.isEmpty) return 'At least one of the name is required';
+                          return null;
+                        },
                         decoration: const InputDecoration(
                             border: UnderlineInputBorder(),
                             labelText: 'First Name'),
@@ -148,6 +152,10 @@ class _InputContactFormState extends State<InputContactForm> {
                       ),
                       TextFormField(
                         textCapitalization: TextCapitalization.words,
+                        validator: (val) {
+                          if ((val == null || val.isEmpty) && fnameCtrlr.text.isEmpty) return 'At least one of the name is required';
+                          return null;
+                        },
                         decoration: const InputDecoration(
                             border: UnderlineInputBorder(),
                             labelText: 'Last Name'),
